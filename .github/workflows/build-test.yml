@@ -4,15 +4,12 @@ name: Build and test with Java 17 and Docker
 on:
   workflow_call:
     secrets:
-      GITHUB_TOKEN:
-        required: true
       SSH_KEY:
         required: true
       KNOWN_HOSTS:
         required: true
-
-env:
-  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      CR_PAT:
+        required: true
 
 jobs:
 
