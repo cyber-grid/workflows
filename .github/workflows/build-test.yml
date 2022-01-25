@@ -3,11 +3,18 @@ name: Build and test with Java 17 and Docker
 
 on:
   workflow_call:
+    inputs:
+      github_token:
+        required: true
+        type: string
     secrets:
       SSH_KEY:
         required: true
       KNOWN_HOSTS:
         required: true
+
+env:
+  GITHUB_TOKEN: ${{ inputs.github_token }}
 
 jobs:
 
