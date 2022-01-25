@@ -11,6 +11,9 @@ on:
       CR_PAT:
         required: true
 
+env:
+  GITHUB_TOKEN: ${{ secrets.CR_PAT }}
+
 jobs:
 
   # Builds service and runs IT tests
