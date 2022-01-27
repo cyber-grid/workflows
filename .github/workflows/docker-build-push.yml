@@ -26,7 +26,6 @@ jobs:
 
   # Builds service and runs IT tests
   build-docker-image:
-    needs: publish
     runs-on: ubuntu-latest
     steps:
       - name: Install SSH key
