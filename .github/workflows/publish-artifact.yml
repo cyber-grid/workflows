@@ -43,12 +43,3 @@ jobs:
 
       - name: Publish Maven package to GitHub Packages
         run: mvn --batch-mode deploy
-
-      - name: Prepare folders for artifact upload
-        run: mkdir staging && cp $JAR_FILE staging
-
-      - name: Upload artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: Package
-          path: staging
