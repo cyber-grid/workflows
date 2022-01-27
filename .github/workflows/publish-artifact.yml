@@ -2,6 +2,11 @@ name: Build and test with Java 17 and Docker
 
 on:
   workflow_call:
+    inputs:
+      repository:
+        required: true
+        type: string
+
     secrets:
       SSH_KEY:
         required: true
@@ -12,6 +17,7 @@ on:
 
 env:
   GITHUB_TOKEN: ${{ secrets.CR_PAT }}
+  REPOSITORY: ${{ inputs.repository }}
 
 jobs:
 
