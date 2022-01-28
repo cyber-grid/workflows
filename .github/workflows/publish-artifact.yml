@@ -22,7 +22,7 @@ env:
 jobs:
 
   # Builds service and runs IT tests
-  publish:
+  publish-artifacts:
     runs-on: ubuntu-latest
     steps:
       - name: Install SSH key
