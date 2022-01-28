@@ -3,7 +3,7 @@ name: Build and test with Java 17 and Docker
 on:
   workflow_call:
     inputs:
-      repository:
+      repository_name:
         required: true
         type: string
 
@@ -17,7 +17,6 @@ on:
 
 env:
   GITHUB_TOKEN: ${{ secrets.CR_PAT }}
-  REPOSITORY: ${{ inputs.repository }}
 
 jobs:
 
@@ -64,6 +63,6 @@ jobs:
 
       - name: Run openapi migration script
         env:
-          REPOSITORY: ${{ env.REPOSITORY }}
+          REPOSITORY_NAME: ${{ inputs.repository_name}}
           APP_VERSION: ${{ env.APP_VERSION }}
         run: sh ./cybernoc-openapi/scripts/openapi-migration.sh ./specs
