@@ -30,9 +30,9 @@ env:
 
 jobs:
 
-  # Release and push the version defined in github.event.inputs.releaseVersion to the Github maven package
-  # Set the next development version defined in github.event.inputs.nextDevelopmentVersion
-  # Perform dry run if github.event.inputs.dryRun is set to true
+  # Release and push the version defined in inputs.release_Version to the Github maven package
+  # Set the next development version defined in inputs.next_Development_version
+  # Perform dry run if inputs.dry_Run is set to true
   maven-release:
     runs-on: ubuntu-latest
     steps:

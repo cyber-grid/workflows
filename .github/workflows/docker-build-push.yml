@@ -24,7 +24,7 @@ env:
 
 jobs:
 
-  # Builds service and runs IT tests
+  # Build and push docker image
   build-docker-image:
     runs-on: ubuntu-latest
     steps:
@@ -80,8 +80,12 @@ jobs:
           mvn spring-boot:build-image --file service/pom.xml -Dspring-boot.build-image.imageName=$IMAGE_NAME:$VERSION
           
           docker tag $IMAGE_NAME:$VERSION $IMAGE_NAME:$SHA
+          docker tag $IMAGE_NAME:$VERSION $IMAGE_NAME:$SHORT_SHA
           docker tag $IMAGE_NAME:$VERSION $IMAGE_NAME:$VERSION-$SHORT_SHA
+          
+          docker push $IMAGE_NAME:$VERSION
           docker push $IMAGE_NAME:$SHA
+          docker push $IMAGE_NAME:$SHORT_SHA
           docker push $IMAGE_NAME:$VERSION-$SHORT_SHA
 
       - name: Image digest
