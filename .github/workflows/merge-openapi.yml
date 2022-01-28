@@ -62,7 +62,7 @@ jobs:
           token: ${{env.GITHUB_TOKEN}}
 
       - name: Run openapi migration script
-        env:
-          REPOSITORY_NAME: ${{ inputs.repository_name}}
-          APP_VERSION: ${{ env.APP_VERSION }}
-        run: sh ./cybernoc-openapi/scripts/openapi-migration.sh ./specs
+        run: |
+          echo "Repo name: $REPOSITORY_NAME"
+          echo "App version: $APP_VERSION"
+          sh ./cybernoc-openapi/scripts/openapi-migration.sh ./specs "${{ inputs.repository_name}}" "${{ env.APP_VERSION }}"
