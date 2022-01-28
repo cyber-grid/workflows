@@ -1,8 +1,11 @@
-
 name: Build and test with Java 17 and Docker
 
 on:
   workflow_call:
+    inputs:
+      upload_target:
+        type: boolean
+        required: false
     secrets:
       SSH_KEY:
         required: true
@@ -39,3 +42,33 @@ jobs:
 
       - name: Run IT tests
         run: mvn clean -B verify -Pintegration-tests
+
+      # Get the application version set in the pom.xml
+      - name: Get app version
+        if: ${{ inputs.upload_target }}
+        run: |
+          echo APP_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout) >> $GITHUB_ENV
+
+      - name: Set app version
+        if: ${{ inputs.upload_target }}
+        run: echo ${{ env.APP_VERSION }} >> app-version.txt
+
+      - name: Print app version
+        if: ${{ inputs.upload_target }}
+        run: cat app-version.txt
+
+      # Upload the app-version artifact to the workflow to be available for the later use: Docker tag, openapi merger job
+      - name: Upload artifact - app-version
+        if: ${{ inputs.upload_target }}
+        uses: actions/upload-artifact@v2
+        with:
+          name: app-version
+          path: app-version.txt
+
+      # Upload the target artifact to the workflow to be available for the later use within the openapi merger job
+      - name: Upload artifact - target
+        if: ${{ inputs.upload_target }}
+        uses: actions/upload-artifact@v2
+        with:
+          name: target
+          path: ./target

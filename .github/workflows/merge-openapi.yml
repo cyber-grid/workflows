@@ -1,0 +1,69 @@
+name: Build and test with Java 17 and Docker
+
+on:
+  workflow_call:
+    inputs:
+      repository:
+        required: true
+        type: string
+
+    secrets:
+      SSH_KEY:
+        required: true
+      KNOWN_HOSTS:
+        required: true
+      CR_PAT:
+        required: true
+
+env:
+  GITHUB_TOKEN: ${{ secrets.CR_PAT }}
+  REPOSITORY: ${{ inputs.repository }}
+
+jobs:
+
+  # Builds service and runs IT tests
+  merge-openapi:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Download artifact - app-version
+        uses: actions/download-artifact@v2
+        with:
+          name: app-version
+
+      # Get the app version from the artifact and set the local variable APP_VERSION
+      - name: Print and set app version
+        run: |
+          cat app-version.txt
+          echo APP_VERSION=$(cat app-version.txt) >> $GITHUB_ENV
+
+      # Download target to get the common-sdk models for openapi
+      - name: Download artifact - target
+        uses: actions/download-artifact@v2
+        with:
+          name: target
+          path: target
+
+      - name: Set node
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12.x
+
+      - name: Install openapi-merger
+        run: npm install -g swagger-merger
+
+      - name: Checkout cybernoc-openapis repo
+        uses: actions/checkout@v2
+        with:
+          repository: cyber-grid/cybernoc-openapi
+          ref: main
+          path: cybernoc-openapi
+          token: ${{env.GITHUB_TOKEN}}
+
+      - name: Run openapi migration script
+        env:
+          REPOSITORY: ${{ env.REPOSITORY }}
+          APP_VERSION: ${{ env.APP_VERSION }}
+        run: sh ./cybernoc-openapi/scripts/openapi-migration.sh ./specs

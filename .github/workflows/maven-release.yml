@@ -1,0 +1,63 @@
+name: Build and test with Java 17 and Docker
+
+on:
+  workflow_call:
+    inputs:
+      repository:
+        required: true
+        type: string
+      dry_run:
+        required: true
+        type: boolean
+      release_version:
+        required: true
+        type: string
+      next_development_version:
+        required: true
+        type: string
+
+    secrets:
+      SSH_KEY:
+        required: true
+      KNOWN_HOSTS:
+        required: true
+      CR_PAT:
+        required: true
+
+env:
+  GITHUB_TOKEN: ${{ secrets.CR_PAT }}
+  REPOSITORY: ${{ inputs.repository }}
+
+jobs:
+
+  # Release and push the version defined in inputs.release_Version to the Github maven package
+  # Set the next development version defined in inputs.next_Development_version
+  # Perform dry run if inputs.dry_Run is set to true
+  maven-release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install SSH key
+        uses: shimataro/ssh-key-action@v2
+        with:
+          key: ${{ secrets.SSH_KEY }}
+          known_hosts: ${{ secrets.KNOWN_HOSTS }}
+          if_key_exists: fail
+
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Configure Git user
+        run: |
+          git config user.email "it@cyber-grid.com"
+          git config user.name "CI bot"
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v2
+        with:
+          server-id: github
+          java-version: 17
+          distribution: 'temurin'
+          cache: maven
+
+      - name: Create Release
+        run: mvn -B release:clean release:prepare -DdryRun=${{ inputs.dry_run }} -DreleaseVersion=${{ inputs.release_version }} -DdevelopmentVersion=${{ inputs.next_development_version }} release:perform
