@@ -63,6 +63,6 @@ jobs:
 
       - name: Run openapi migration script
         run: |
-          echo "Repo name: $REPOSITORY_NAME"
+          echo "Repo name: ${{ inputs.repository_name}}"
           echo "App version: $APP_VERSION"
           sh ./cybernoc-openapi/scripts/openapi-migration.sh ./specs "${{ inputs.repository_name}}" "${{ env.APP_VERSION }}"

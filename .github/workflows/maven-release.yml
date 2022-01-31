@@ -8,7 +8,7 @@ on:
         type: string
       dry_run:
         required: true
-        type: boolean
+        type: string
       release_version:
         required: true
         type: string
