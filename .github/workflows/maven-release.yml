@@ -62,16 +62,9 @@ jobs:
       - name: Create Release
         run: mvn -B release:clean release:prepare -DdryRun=${{ inputs.dry_run }} -DreleaseVersion=${{ inputs.release_version }} -DdevelopmentVersion=${{ inputs.next_development_version }} release:perform
 
-        # Get the application version after release
-      - name: Get app version
-        if: ${{ inputs.upload_target }}
-        run: |
-          echo APP_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout) >> $GITHUB_ENV
-
+        # Set released application version
       - name: Set app version
-        if: ${{ inputs.upload_target }}
-        run: echo ${{ env.APP_VERSION }} >> app-version.txt
+        run: echo ${{ inputs.release_version }} >> app-version.txt
 
       - name: Print app version
-        if: ${{ inputs.upload_target }}
         run: cat app-version.txt
