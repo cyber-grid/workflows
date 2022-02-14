@@ -27,17 +27,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Download artifact - app-version
-        uses: actions/download-artifact@v2
-        with:
-          name: app-version
-
-      # Get the app version from the artifact and set the local variable APP_VERSION
-      - name: Print and set app version
-        run: |
-          cat app-version.txt
-          echo APP_VERSION=$(cat app-version.txt) >> $GITHUB_ENV
-
       # Download target to get the common-sdk models for openapi
       - name: Download artifact - target
         uses: actions/download-artifact@v2
@@ -64,5 +53,4 @@ jobs:
       - name: Run openapi migration script
         run: |
           echo "Repo name: ${{ inputs.repository_name}}"
-          echo "App version: $APP_VERSION"
-          sh ./cybernoc-openapi/scripts/openapi-migration.sh ./specs "${{ inputs.repository_name}}" "${{ env.APP_VERSION }}"
+          bash ./cybernoc-openapi/scripts/openapi-migration.sh ./specs "${{ inputs.repository_name}}"
