@@ -9,6 +9,10 @@ on:
       repository_owner:
         required: true
         type: string
+      download_target:
+        type: boolean
+        required: false
+        default: true
 
     secrets:
       SSH_KEY:
@@ -57,6 +61,7 @@ jobs:
 
       # Download target to get the common-sdk models for openapi
       - name: Download artifact - target
+        if: ${{ inputs.download_target }}
         uses: actions/download-artifact@v2
         with:
           name: target
