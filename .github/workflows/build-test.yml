@@ -45,21 +45,17 @@ jobs:
 
       # Get the application version set in the pom.xml
       - name: Get app version
-        if: ${{ inputs.upload_target }}
         run: |
           echo APP_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout) >> $GITHUB_ENV
 
       - name: Set app version
-        if: ${{ inputs.upload_target }}
         run: echo ${{ env.APP_VERSION }} >> app-version.txt
 
       - name: Print app version
-        if: ${{ inputs.upload_target }}
         run: cat app-version.txt
 
       # Upload the app-version artifact to the workflow to be available for the later use: Docker tag, openapi merger job
       - name: Upload artifact - app-version
-        if: ${{ inputs.upload_target }}
         uses: actions/upload-artifact@v2
         with:
           name: app-version
