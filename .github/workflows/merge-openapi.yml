@@ -6,6 +6,10 @@ on:
       repository_name:
         required: true
         type: string
+      publish:
+        required: false
+        type: boolean
+        default: true
 
     secrets:
       SSH_KEY:
@@ -53,4 +57,4 @@ jobs:
       - name: Run openapi migration script
         run: |
           echo "Repo name: ${{ inputs.repository_name}}"
-          bash ./cybernoc-openapi/scripts/openapi-migration.sh ./specs "${{ inputs.repository_name}}"
+          bash ./cybernoc-openapi/scripts/openapi-migration.sh ./specs "${{ inputs.repository_name}}" ${{inputs.publish}}
