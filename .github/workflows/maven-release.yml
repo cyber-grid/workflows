@@ -44,7 +44,7 @@ jobs:
           if_key_exists: fail
 
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           token: ${{ secrets.CR_PAT }}
 
@@ -54,7 +54,7 @@ jobs:
           git config user.name "CI bot"
 
       - name: Set up JDK 17
-        uses: actions/setup-java@v2
+        uses: actions/setup-java@v3
         with:
           server-id: github
           java-version: 17
@@ -73,7 +73,7 @@ jobs:
 
       # Upload the app-version artifact to the workflow to be available for the later use: Docker tag, openapi merger job
       - name: Upload artifact - app-version
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: app-version
           path: app-version.txt

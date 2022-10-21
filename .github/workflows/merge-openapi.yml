@@ -29,11 +29,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       # Download target to get the common-sdk models for openapi
       - name: Download artifact - target
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: target
           path: target
@@ -47,7 +47,7 @@ jobs:
         run: npm install -g swagger-merger
 
       - name: Checkout cybernoc-openapis repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           repository: cyber-grid/cybernoc-openapi
           ref: main
