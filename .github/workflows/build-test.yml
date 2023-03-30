@@ -41,7 +41,7 @@ jobs:
           cache: maven
 
       - name: Run IT tests
-        run: mvn clean -B verify -U -Pintegration-tests
+        run: mvn clean -B install -U -Pintegration-tests
 
       # Get the application version set in the pom.xml
       - name: Get app version
