@@ -89,7 +89,6 @@ jobs:
           VERSION=${{ env.APP_VERSION }}
           IMAGE_NAME=ghcr.io/${{ github.repository }}
           
-          mvn clean install
           mvn spring-boot:build-image --file service/pom.xml -Dspring-boot.build-image.imageName=$IMAGE_NAME:$VERSION
           
           docker tag $IMAGE_NAME:$VERSION $IMAGE_NAME:$SHA
