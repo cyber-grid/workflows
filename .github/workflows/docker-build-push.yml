@@ -99,6 +99,21 @@ jobs:
           docker push $IMAGE_NAME:$SHA
           docker push $IMAGE_NAME:$SHORT_SHA
           docker push $IMAGE_NAME:$VERSION-$SHORT_SHA
+          
+          echo "DOCKER_IMAGE_NAME=$IMAGE_NAME:$VERSION-$SHORT_SHA" >> $GITHUB_ENV
 
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
+
+      - name: Run Trivy vulnerability scanner
+        if: contains(github.event.pull_request.labels.*.name, 'security') && contains(github.event.pull_request.labels.*.name, 'docker')
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: ${{ env.DOCKER_IMAGE_NAME }}
+          format: 'table'
+          exit-code: '0'
+          ignore-unfixed: true
+          github-pat: ${{ secrets.CR_PAT }}
+        env:
+          TRIVY_USERNAME: ${{ inputs.repository_owner }}
+          TRIVY_PASSWORD: ${{ secrets.CR_PAT }}
