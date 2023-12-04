@@ -43,4 +43,4 @@ jobs:
           cache: maven
 
       - name: Publish Maven package to GitHub Packages
-        run: mvn --batch-mode package deploy
+        run: mvn --batch-mode deploy
