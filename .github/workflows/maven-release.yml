@@ -74,7 +74,7 @@ jobs:
 
       # Upload the app-version artifact to the workflow to be available for the later use: Docker tag, openapi merger job
       - name: Upload artifact - app-version
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v3
         with:
           name: app-version
           path: app-version.txt
